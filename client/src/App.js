@@ -1,14 +1,29 @@
-import "./reset.css";
+import { useEffect, useState } from "react";
 import { Header, Main, TextField } from "./components";
-import { useState } from "react";
+import "./reset.css";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3001");
 
 function App() {
-  const [question, setQuestion] = useState();
+  const [chatMessages, setChatMessages] = useState([]);
+
+  useEffect(() => {
+    socket.on("chat", (data) => {
+      setChatMessages((s) => [...s, { isMine: false, message: data }]);
+    });
+  }, []);
+
+  const sendChat = (message) => {
+    setChatMessages((s) => [...s, { isMine: true, message }]);
+    socket.emit("chat", message);
+  };
+
   return (
     <div className="App">
       <Header />
-      <Main question={question} />
-      <TextField setQuestion={setQuestion} />
+      <Main chatMessages={chatMessages} />
+      <TextField sendChat={sendChat} />
     </div>
   );
 }

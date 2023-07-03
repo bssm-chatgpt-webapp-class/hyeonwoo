@@ -1,12 +1,24 @@
 import "./index.css";
-import { profileImageLink, chatgptResponse } from "../../fixtures";
+import { chatgptResponse, profileImageLink } from "../../fixtures";
 import ChatItem from "../ChatItem";
 
-const Main = ({ question }) => {
+const Main = ({ chatMessages }) => {
   return (
     <div className="main">
-      <ChatItem imageLink={profileImageLink} text={question} />
-      <ChatItem imageLink="/images/chatgpt-logo.svg" text={chatgptResponse} />
+      {chatMessages.map((item) => {
+        return (
+          <>
+            {item.isMine ? (
+              <ChatItem imageLink={profileImageLink} text={item.message} />
+            ) : (
+              <ChatItem
+                imageLink="/images/chatgpt-logo.svg"
+                text={item.message}
+              />
+            )}
+          </>
+        );
+      })}
     </div>
   );
 };
