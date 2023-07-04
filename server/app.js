@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+require("dotenv").config();
+
 const router = require("./routers");
 
 const { connect } = require("./models/connector");
