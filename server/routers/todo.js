@@ -1,34 +1,37 @@
 const express = require("express");
 const router = express.Router();
+const { getConnection } = require("../models/connector");
 
 let currentId = 1;
 let database = [];
 
-router.get("/", (req, res) => {
-  res.json(database);
+router.get("/", async (req, res) => {
+  const [results] = await getConnection().execute(`SELECT * FROM todo`);
+  res.json(results);
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const data = req.body;
-  database.push({ id: currentId++, text: data.text });
-  return res.json("success");
-});
-
-router.put("/:id", (req, res) => {
-  // database.filter((data) => {
-  //   if (data.id === Number(req.params.id)) {
-  //     data.text = req.body.text;
-  //   }
-  // });
-  const updateIndex = database.findIndex(
-    (item) => item.id === Number(req.params.id)
+  await getConnection().execute(
+    `INSERT INTO todo (todo, completed) VALUES (?,?)`,
+    [data.todo, data.completed]
   );
-  database[updateIndex].text = req.body.text;
   return res.json("success");
 });
 
-router.delete("/:id", (req, res) => {
-  database = database.filter((item) => item.id !== Number(req.params.id));
+router.put("/:id", async (req, res) => {
+  const id = req.params.id;
+  const { todo, completed } = req.body;
+  await getConnection().execute(
+    `UPDATE todo SET todo =?, completed =? WHERE id =?`,
+    [todo, completed, id]
+  );
+  return res.json("success");
+});
+
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  await getConnection().execute(`DELETE FROM todo WHERE id =?`, [id]);
   return res.json("success");
 });
 
