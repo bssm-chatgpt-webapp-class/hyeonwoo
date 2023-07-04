@@ -13,7 +13,7 @@ router.post("/signin", async (req, res) => {
     return res.json("no user");
   }
   const token = jwt.sign(
-    { email, exp: Math.floor(Date.now() / 1000) + 60 * 60 }, // exp: 1hour
+    { id: results[0].id, email, exp: Math.floor(Date.now() / 1000) + 60 * 60 }, // exp: 1hour
     "secret"
   );
   res.json(token);
