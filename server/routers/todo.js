@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { getConnection } = require("../models/connector");
-const jwt = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/auth");
 const { hasAuth } = require("../middlewares/todo");
 

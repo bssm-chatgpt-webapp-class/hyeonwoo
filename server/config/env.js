@@ -4,4 +4,5 @@ module.exports = {
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   jwtSecret: process.env.JWT_SECRET,
+  openaiApiKey: process.env.OPENAI_API_KEY,
 };
