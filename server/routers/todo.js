@@ -2,9 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { getConnection } = require("../models/connector");
 
-let currentId = 1;
-let database = [];
-
 router.get("/", async (req, res) => {
   const [results] = await getConnection().execute(`SELECT * FROM todo`);
   res.json(results);
